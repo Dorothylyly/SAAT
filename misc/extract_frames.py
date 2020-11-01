@@ -6,6 +6,7 @@ import argparse
 
 def extract_frames(output, dirname, filenames, frame_num):
 	"""Extract frames in a video. """
+	add_frames = None
 	#Read videos and extract features in batches
 	for file_cnt, fname in enumerate(filenames):
 		vid = imageio.get_reader(os.path.join(output, dirname, fname), 'ffmpeg')
@@ -20,9 +21,12 @@ def extract_frames(output, dirname, filenames, frame_num):
 				frame = np.repeat(frame,3)
 			if i in idx:
 				imageio.imwrite(os.path.join(frames_dir, str(cnt)+'.jpg'), frame)
+				add_frames = frame
 				cnt += 1
 				if cnt > 28:
 					break
+		for i in range(cnt,29):
+			imageio.imwrite(os.path.join(frames_dir, str(cnt)+'.jpg'), add_frames)
 		print('{}/{} done'.format(file_cnt, len(filenames)))
 		assert len(os.listdir(frames_dir)) == frame_num, 'Wrong frame number...'
 
