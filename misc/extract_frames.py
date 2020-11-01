@@ -26,7 +26,7 @@ def extract_frames(output, dirname, filenames, frame_num):
 				if cnt > 28:
 					break
 		for i in range(cnt,29):
-			imageio.imwrite(os.path.join(frames_dir, str(cnt)+'.jpg'), add_frames)
+			imageio.imwrite(os.path.join(frames_dir, str(i)+'.jpg'), add_frames)
 		print('{}/{} done'.format(file_cnt, len(filenames)))
 		assert len(os.listdir(frames_dir)) == frame_num, 'Wrong frame number...'
 
