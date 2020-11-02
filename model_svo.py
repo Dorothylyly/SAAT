@@ -434,10 +434,13 @@ class CaptionModel(nn.Module):
                     break
                 
                 if self.training:
-                    lan_cont = self.embed(torch.cat((pos[:,1:2], it.unsqueeze(1)), 1))
+#                     lan_cont = self.embed(torch.cat((pos[:,1:2], it.unsqueeze(1)), 1))
+                      lan_cont = self.embed(torch.cat((pos[:,0:2], it.unsqueeze(1)), 1))
                 else:
-                    lan_cont = self.embed(torch.cat((svo_it[:,1:2], it.unsqueeze(1)), 1))
-                hid_cont = state[0].transpose(0,1).expand(lan_cont.shape[0], 2, state[0].shape[2])
+#                     lan_cont = self.embed(torch.cat((svo_it[:,1:2], it.unsqueeze(1)), 1))
+                      lan_cont = self.embed(torch.cat((svo_it[:,0:2], it.unsqueeze(1)), 1))
+#               hid_cont = state[0].transpose(0,1).expand(lan_cont.shape[0], 2, state[0].shape[2])
+                hid_cont = state[0].transpose(0,1).expand(lan_cont.shape[0], 3, state[0].shape[2])
                 alpha = self.att_layer(torch.tanh(self.l2a_layer(lan_cont)+self.h2a_layer(hid_cont)))
                 alpha = F.softmax(alpha, dim=1).transpose(1, 2)
                 xt = torch.matmul(alpha, lan_cont).squeeze(1)
